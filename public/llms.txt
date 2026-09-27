@@ -1,0 +1,14 @@
+# Rivyr
+
+> Rivyr（GitHub: wilyum-rivyr-tsao）的个人主页。开发者，关注前端工程、AI/LLM 应用与自动化。
+
+## 页面
+
+- [首页](https://wilyum-rivyr-tsao.github.io/): 个人介绍、技术栈、最新文章
+- [文章](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（前端、环境配置、工具流等）
+
+## 说明
+
+- 全站为静态 HTML，语义化标签，可直接抓取
+- Sitemap: https://wilyum-rivyr-tsao.github.io/sitemap-index.xml
+- 联系方式见首页 GitHub / X 链接

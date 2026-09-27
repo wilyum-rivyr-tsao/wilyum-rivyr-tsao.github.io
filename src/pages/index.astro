@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import { PROFILE } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const latest = posts.slice(0, 4);
+const fmt = (d: Date) => d.toISOString().slice(0, 10);
+---
+<Base>
+  <section class="bento" aria-label="个人主页">
+    <!-- 个人介绍主卡 -->
+    <article class="card card-hero reveal">
+      <div class="spot"></div>
+      <div class="hero-top">
+        <img class="avatar" src={PROFILE.avatar} alt={`${PROFILE.name} 的头像`} width="92" height="92" />
+        <div>
+          <h1 class="name">{PROFILE.name}</h1>
+          <p class="type-line">$ <span id="typed"></span><span class="cursor">▌</span></p>
+        </div>
+      </div>
+      <div class="bio">
+        {PROFILE.bio.map((line) => <p>{line}</p>)}
+      </div>
+      <div class="socials">
+        <a href={`https://github.com/${PROFILE.github}`} target="_blank" rel="noopener">⌥ GitHub</a>
+        {PROFILE.twitter && <a href={`https://x.com/${PROFILE.twitter}`} target="_blank" rel="noopener">𝕏 Twitter</a>}
+        {PROFILE.email && <a href={`mailto:${PROFILE.email}`}>✉ Email</a>}
+        <a href="/blog/">✎ 博客</a>
+      </div>
+    </article>
+
+    <!-- 位置/时间 -->
+    <article class="card reveal">
+      <div class="spot"></div>
+      <h3>Local Time</h3>
+      <p class="clock" id="clock">--:--</p>
+      <p class="loc">📍 {PROFILE.location}</p>
+    </article>
+
+    <!-- 博客统计 -->
+    <article class="card reveal">
+      <div class="spot"></div>
+      <h3>Blog</h3>
+      <div class="stats-row">
+        <div>
+          <p class="stat-num">{posts.length}</p>
+          <p class="stat-label">篇文章</p>
+        </div>
+        <div>
+          <p class="stat-num">{new Set(posts.map((p) => p.data.category)).size}</p>
+          <p class="stat-label">个分类</p>
+        </div>
+      </div>
+    </article>
+
+    <!-- 最新文章 -->
+    <article class="card card-wide card-tall reveal">
+      <div class="spot"></div>
+      <h3>Latest Posts</h3>
+      <ul class="posts-mini">
+        {latest.map((p) => (
+          <li>
+            <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
+          </li>
+        ))}
+      </ul>
+      <a class="more-link" href="/blog/">全部 {posts.length} 篇 →</a>
+    </article>
+
+    <!-- 技术栈 -->
+    <article class="card card-wide reveal">
+      <div class="spot"></div>
+      <h3>Tech Stack</h3>
+      <div class="tags">
+        {PROFILE.stack.map((s) => <span class="tag">{s}</span>)}
+      </div>
+    </article>
+
+    <!-- 正在关注 -->
+    <article class="card card-wide reveal">
+      <div class="spot"></div>
+      <h3>Now / 正在关注</h3>
+      <ul class="now-list">
+        {PROFILE.now.map((n) => <li>{n}</li>)}
+      </ul>
+    </article>
+  </section>
+
+  <script is:inline define:vars={{ roles: PROFILE.roles, tz: PROFILE.timezone }}>
+    // 打字机
+    const el = document.getElementById('typed');
+    let ri = 0, ci = 0, del = false;
+    (function tick() {
+      const word = roles[ri];
+      el.textContent = word.slice(0, ci);
+      if (!del && ci < word.length) { ci++; setTimeout(tick, 70); }
+      else if (!del) { del = true; setTimeout(tick, 1600); }
+      else if (ci > 0) { ci--; setTimeout(tick, 35); }
+      else { del = false; ri = (ri + 1) % roles.length; setTimeout(tick, 300); }
+    })();
+    // 本地时钟
+    const clock = document.getElementById('clock');
+    (function updateClock() {
+      clock.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: tz });
+      setTimeout(updateClock, 10000);
+    })();
+  </script>
+</Base>

@@ -1,0 +1,73 @@
+---
+import { SITE } from '../consts';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+const { title = SITE.title, description = SITE.description } = Astro.props;
+const fullTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
+---
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{fullTitle}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, SITE.url)} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="sitemap" href="/sitemap-index.xml" />
+  <script is:inline>
+    // 首屏防闪烁：尽早应用主题
+    const t = localStorage.getItem('theme')
+      || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+    document.documentElement.dataset.theme = t;
+  </script>
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="site-nav">
+      <a class="logo" href="/">rivyr<em>.</em>dev</a>
+      <nav class="links">
+        <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>首页</a>
+        <a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>文章</a>
+        <a href="https://github.com/wilyum-rivyr-tsao" target="_blank" rel="noopener">GitHub</a>
+        <button id="theme-toggle" aria-label="切换主题">🌓</button>
+      </nav>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <p>© {new Date().getFullYear()} Rivyr · Built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a> · <a href="/llms.txt">llms.txt</a></p>
+    </footer>
+  </div>
+  <script is:inline>
+    // 主题切换
+    document.getElementById('theme-toggle').addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    });
+    // 卡片鼠标追光
+    document.querySelectorAll('.card').forEach((card) => {
+      card.addEventListener('pointermove', (e) => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+    // 滚动浮现
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((en) => en.isIntersecting && en.target.classList.add('in'));
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+  </script>
+</body>
+</html>
