@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "How to do a redirect to another route programmatically with react router v4"
 date: 2017-08-30
 category: "React"

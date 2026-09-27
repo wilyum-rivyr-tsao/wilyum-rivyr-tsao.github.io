@@ -8,6 +8,8 @@ const blog = defineCollection({
     date: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     category: z.string().default('Notes'),
+    // 正文语言（按标题中文字符占比推断），用于列表/详情页语言徽章
+    lang: z.enum(['zh', 'en']),
   }),
 });
 

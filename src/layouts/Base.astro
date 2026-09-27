@@ -1,16 +1,17 @@
 ---
-import { SITE } from '../consts';
+import { SITE, UI } from '../consts';
 import '../styles/global.css';
 
 interface Props {
   title?: string;
   description?: string;
 }
-const { title = SITE.title, description = SITE.description } = Astro.props;
+// meta description 只能取一种语言，用默认语言（中文）
+const { title = SITE.title, description = SITE.description.zh } = Astro.props;
 const fullTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
 ---
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-lang="zh">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,10 +24,13 @@ const fullTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <script is:inline>
-    // 首屏防闪烁：尽早应用主题
+    // 首屏防闪烁：尽早应用主题与语言（默认中文）
     const t = localStorage.getItem('theme')
       || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     document.documentElement.dataset.theme = t;
+    const l = localStorage.getItem('lang') || 'zh';
+    document.documentElement.dataset.lang = l;
+    document.documentElement.lang = l === 'en' ? 'en' : 'zh-CN';
   </script>
 </head>
 <body>
@@ -35,10 +39,15 @@ const fullTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
     <header class="site-nav">
       <a class="logo" href="/">rivyr<em>.</em>dev</a>
       <nav class="links">
-        <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>首页</a>
-        <a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>文章</a>
+        <a href="/" aria-current={Astro.url.pathname === '/' ? 'page' : undefined}>
+          <span class="lang-zh">{UI.nav.home.zh}</span><span class="lang-en">{UI.nav.home.en}</span>
+        </a>
+        <a href="/blog/" aria-current={Astro.url.pathname.startsWith('/blog') ? 'page' : undefined}>
+          <span class="lang-zh">{UI.nav.blog.zh}</span><span class="lang-en">{UI.nav.blog.en}</span>
+        </a>
         <a href="https://github.com/wilyum-rivyr-tsao" target="_blank" rel="noopener">GitHub</a>
-        <button id="theme-toggle" aria-label="切换主题">🌓</button>
+        <button id="lang-toggle" aria-label="切换语言 / Switch language"><span class="lang-zh">EN</span><span class="lang-en">中</span></button>
+        <button id="theme-toggle" aria-label="切换主题 / Toggle theme">🌓</button>
       </nav>
     </header>
     <main>
@@ -54,6 +63,14 @@ const fullTitle = title === SITE.title ? title : `${title} · ${SITE.title}`;
       const next = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
       document.documentElement.dataset.theme = next;
       localStorage.setItem('theme', next);
+    });
+    // 语言切换：更新 <html data-lang> 并广播事件（打字机/时钟等监听）
+    document.getElementById('lang-toggle').addEventListener('click', () => {
+      const next = document.documentElement.dataset.lang === 'en' ? 'zh' : 'en';
+      document.documentElement.dataset.lang = next;
+      document.documentElement.lang = next === 'en' ? 'en' : 'zh-CN';
+      localStorage.setItem('lang', next);
+      window.dispatchEvent(new CustomEvent('langchange', { detail: next }));
     });
     // 卡片鼠标追光
     document.querySelectorAll('.card').forEach((card) => {

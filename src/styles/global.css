@@ -80,12 +80,31 @@ nav.links a {
   transition: color 0.2s;
 }
 nav.links a:hover, nav.links a.active { color: var(--text); }
+/* ---------- 双语显隐（默认 zh，两种语言文本都在 HTML 中） ---------- */
+html[data-lang="zh"] .lang-en { display: none; }
+html[data-lang="en"] .lang-zh { display: none; }
+
 #theme-toggle {
   background: var(--card); border: 1px solid var(--card-border);
   border-radius: 999px; width: 38px; height: 38px; cursor: pointer;
   font-size: 16px; color: var(--text); transition: transform 0.2s;
 }
 #theme-toggle:hover { transform: scale(1.1); }
+#lang-toggle {
+  background: var(--card); border: 1px solid var(--card-border);
+  border-radius: 999px; min-width: 38px; height: 38px; padding: 0 12px;
+  cursor: pointer; font-family: var(--mono); font-size: 13px; font-weight: 600;
+  color: var(--text); transition: transform 0.2s;
+}
+#lang-toggle:hover { transform: scale(1.1); }
+
+/* 文章语言徽章（标识正文语言，不随 UI 语言变化） */
+.lang-badge {
+  font-family: var(--mono); font-size: 11px; padding: 2px 8px;
+  border-radius: 6px; white-space: nowrap;
+  background: rgba(124, 108, 255, 0.12); color: var(--accent);
+  border: 1px solid rgba(124, 108, 255, 0.3);
+}
 
 /* ---------- bento 网格 ---------- */
 .bento {

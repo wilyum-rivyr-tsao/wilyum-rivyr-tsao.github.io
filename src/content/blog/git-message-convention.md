@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "git message convention"
 date: 2018-09-10
 category: "git"

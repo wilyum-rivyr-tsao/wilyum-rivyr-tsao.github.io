@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "use nodejs server to serve & test react app on centos 6"
 date: 2017-04-19
 category: "React"

@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { UI } from '../../consts';
 import { getCollection, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -12,11 +13,16 @@ const { Content } = await render(post);
 ---
 <Base title={post.data.title} description={post.data.title}>
   <article class="post">
-    <p><a class="back-link" href="/blog/">← 返回文章列表</a></p>
+    <p>
+      <a class="back-link" href="/blog/">
+        <span class="lang-zh">{UI.blogPage.back.zh}</span><span class="lang-en">{UI.blogPage.back.en}</span>
+      </a>
+    </p>
     <h1>{post.data.title}</h1>
     <p class="post-meta">
       <time datetime={post.data.date.toISOString()}>{post.data.date.toISOString().slice(0, 10)}</time>
       · {post.data.category}
+      <span class="lang-badge">{post.data.lang === 'zh' ? '中文' : 'EN'}</span>
       {post.data.tags.map((t) => <span class="tag">{t}</span>)}
     </p>
     <div class="prose">

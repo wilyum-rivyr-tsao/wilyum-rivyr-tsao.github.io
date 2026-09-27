@@ -7,22 +7,23 @@
 - **站点**: https://wilyum-rivyr-tsao.github.io/
 - **技术栈**: Astro 5（静态输出）+ 纯手写 CSS（无 Tailwind/框架依赖）+ 少量原生 JS
 - **部署**: push 到 `master` → GitHub Actions（`.github/workflows/deploy.yml`，withastro/action）→ GitHub Pages（build_type=workflow）
-- **风格**: 2026 现代风——深色 aurora 渐变背景、玻璃拟态 bento 卡片、鼠标追光、滚动浮现、打字机、明暗主题切换
+- **风格**: 2026 现代风——深色 aurora 渐变背景、玻璃拟态 bento 卡片、鼠标追光、滚动浮现、打字机、明暗主题切换、中英双语切换
+- **双语（zh-CN / en）**：默认中文；`<html data-lang="zh|en">` + `.lang-zh`/`.lang-en` 双块元素控制显隐，两种语言文本都在 HTML 中；导航栏"中/EN"按钮切换，偏好存 `localStorage('lang')`；切换时广播 `window` 的 `langchange` 事件（打字机、时钟等脚本监听）
 - **LLM 友好**: `/public/llms.txt`、sitemap（@astrojs/sitemap）、语义化 HTML，改动时不得破坏这些
 
 ## 目录结构
 
 ```
 src/
-  consts.ts            # ⭐ 所有个人信息/介绍/技能/社交链接都在这里，用户最常改的文件
-  content.config.ts    # 博客内容集合（glob loader, schema: title/date/tags/category）
-  content/blog/*.md    # 21 篇从 Jekyll 迁移的文章（中英混合，2017-2020）
-  layouts/Base.astro   # 全站布局：导航、主题切换、追光/滚动浮现脚本
-  pages/index.astro    # 首页 bento 网格
-  pages/blog/index.astro      # 文章列表（按年份分组）
-  pages/blog/[...slug].astro  # 文章详情
-  styles/global.css    # 全部样式，CSS 变量主题（--bg/--accent 等）
-public/                # avatar.jpg, favicon.svg, llms.txt, robots.txt
+  consts.ts            # ⭐ 所有个人信息/介绍/技能/社交链接都在这里（{ zh, en } 双语结构，含 UI 文案表），用户最常改的文件
+  content.config.ts    # 博客内容集合（glob loader, schema: title/date/tags/category/lang）
+  content/blog/*.md    # 21 篇从 Jekyll 迁移的文章（中英混合，2017-2020；front matter 有 lang: zh|en）
+  layouts/Base.astro   # 全站布局：导航、主题切换、语言切换、追光/滚动浮现脚本
+  pages/index.astro    # 首页 bento 网格（打字机双词库、时钟随语言换 locale）
+  pages/blog/index.astro      # 文章列表（按年份分组 + 语言徽章）
+  pages/blog/[...slug].astro  # 文章详情（语言徽章，正文保持原文）
+  styles/global.css    # 全部样式，CSS 变量主题（--bg/--accent 等），含 .lang-zh/.lang-en 显隐规则
+public/                # avatar.jpg, favicon.svg, llms.txt（双语）, robots.txt
 ```
 
 ## 硬性约定

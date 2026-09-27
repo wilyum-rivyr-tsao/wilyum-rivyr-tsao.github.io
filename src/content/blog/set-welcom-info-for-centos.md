@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "set Welcom info for CentOS"
 date: 2017-05-25
 category: "Environment"

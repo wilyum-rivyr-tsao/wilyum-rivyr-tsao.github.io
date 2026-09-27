@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "Define page Name and authtication in router"
 date: 2020-02-16
 category: "vue-router"

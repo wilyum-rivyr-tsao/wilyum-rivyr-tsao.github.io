@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import { UI } from '../../consts';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
@@ -14,14 +15,17 @@ posts.forEach((p) => {
 const years = [...byYear.keys()].sort((a, b) => b - a);
 const fmt = (d: Date) => d.toISOString().slice(0, 10);
 ---
-<Base title="文章" description="Rivyr 的技术文章归档">
-  <h1 class="page-title">✎ 文章</h1>
+<Base title={UI.blogPage.title.zh} description={UI.blogPage.description.zh}>
+  <h1 class="page-title">
+    <span class="lang-zh">{UI.blogPage.title.zh}</span><span class="lang-en">{UI.blogPage.title.en}</span>
+  </h1>
   {years.map((y) => (
     <section class="year-group">
       <h2>{y}</h2>
       {byYear.get(y)!.map((p) => (
         <div class="post-row">
           <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+          <span class="lang-badge">{p.data.lang === 'zh' ? '中文' : 'EN'}</span>
           <span class="cat">{p.data.category}</span>
           <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
         </div>

@@ -1,14 +1,18 @@
 # Rivyr
 
-> Rivyr（GitHub: wilyum-rivyr-tsao）的个人主页。开发者，关注前端工程、AI/LLM 应用与自动化。
+> Rivyr（GitHub: wilyum-rivyr-tsao）的个人主页。开发者，关注前端工程、AI/LLM 应用与自动化。全站中英双语（默认中文）。
+> Personal site of Rivyr (GitHub: wilyum-rivyr-tsao) — a developer focused on frontend engineering, AI/LLM applications, and automation. The whole site is bilingual (Chinese by default).
 
-## 页面
+## 页面 / Pages
 
-- [首页](https://wilyum-rivyr-tsao.github.io/): 个人介绍、技术栈、最新文章
-- [文章](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（前端、环境配置、工具流等）
+- [首页 / Home](https://wilyum-rivyr-tsao.github.io/): 个人介绍、技术栈、最新文章 / Bio, tech stack, and latest posts
+- [文章 / Blog](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（2017–2020，中英混合，每篇带语言徽章）/ Technical blog archive (2017–2020, mixed Chinese and English, each post marked with a language badge)
 
-## 说明
+## 说明 / Notes
 
-- 全站为静态 HTML，语义化标签，可直接抓取
+- 全站为静态 HTML，语义化标签；中英双语文本均包含在 HTML 中（通过 `<html data-lang>` 切换显隐），无需执行 JS 即可读取任一语言。
+- Fully static HTML with semantic tags. Both Chinese and English text are present in the markup (toggled via the `data-lang` attribute on `<html>`), so either language can be read without executing JS.
+- 博客正文保持原文语言（中文或英文），front matter 中的 `lang` 字段标明每篇语言。
+- Blog posts keep their original language (Chinese or English); the `lang` field in front matter marks each post's language.
 - Sitemap: https://wilyum-rivyr-tsao.github.io/sitemap-index.xml
-- 联系方式见首页 GitHub / X 链接
+- 联系方式见首页 GitHub / X 链接。/ Contact links (GitHub / X) are on the home page.

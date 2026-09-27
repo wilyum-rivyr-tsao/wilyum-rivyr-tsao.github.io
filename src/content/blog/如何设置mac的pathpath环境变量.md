@@ -1,4 +1,5 @@
 ---
+lang: zh
 title: "如何设置mac的PATH（$PATH）环境变量"
 date: 2019-07-06
 category: "Environment"

@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "A better way to typecheck for JS"
 date: 2017-09-21
 category: "JS sinppet"

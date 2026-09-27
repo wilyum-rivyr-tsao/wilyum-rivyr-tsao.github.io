@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "Vue Router No Hash Mode"
 date: 2020-02-03
 category: "vue-router"

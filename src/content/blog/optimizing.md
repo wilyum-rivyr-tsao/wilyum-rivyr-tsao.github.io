@@ -1,4 +1,5 @@
 ---
+lang: en
 title: "Optimizing"
 date: 2018-02-05
 category: "Optimize"

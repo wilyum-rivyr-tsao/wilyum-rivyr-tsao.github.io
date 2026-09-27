@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { PROFILE } from '../consts';
+import { PROFILE, UI } from '../consts';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
@@ -9,48 +9,61 @@ const latest = posts.slice(0, 4);
 const fmt = (d: Date) => d.toISOString().slice(0, 10);
 ---
 <Base>
-  <section class="bento" aria-label="个人主页">
+  <section class="bento" aria-label="个人主页 / Home">
     <!-- 个人介绍主卡 -->
     <article class="card card-hero reveal">
       <div class="spot"></div>
       <div class="hero-top">
-        <img class="avatar" src={PROFILE.avatar} alt={`${PROFILE.name} 的头像`} width="92" height="92" />
+        <img class="avatar" src={PROFILE.avatar} alt={`${PROFILE.name} 的头像 / avatar`} width="92" height="92" />
         <div>
           <h1 class="name">{PROFILE.name}</h1>
           <p class="type-line">$ <span id="typed"></span><span class="cursor">▌</span></p>
         </div>
       </div>
       <div class="bio">
-        {PROFILE.bio.map((line) => <p>{line}</p>)}
+        <div class="lang-zh">
+          {PROFILE.bio.zh.map((line) => <p>{line}</p>)}
+        </div>
+        <div class="lang-en">
+          {PROFILE.bio.en.map((line) => <p>{line}</p>)}
+        </div>
       </div>
       <div class="socials">
         <a href={`https://github.com/${PROFILE.github}`} target="_blank" rel="noopener">⌥ GitHub</a>
         {PROFILE.twitter && <a href={`https://x.com/${PROFILE.twitter}`} target="_blank" rel="noopener">𝕏 Twitter</a>}
         {PROFILE.email && <a href={`mailto:${PROFILE.email}`}>✉ Email</a>}
-        <a href="/blog/">✎ 博客</a>
+        <a href="/blog/">
+          <span class="lang-zh">✎ 博客</span><span class="lang-en">✎ Blog</span>
+        </a>
       </div>
     </article>
 
     <!-- 位置/时间 -->
     <article class="card reveal">
       <div class="spot"></div>
-      <h3>Local Time</h3>
+      <h3><span class="lang-zh">{UI.card.localTime.zh}</span><span class="lang-en">{UI.card.localTime.en}</span></h3>
       <p class="clock" id="clock">--:--</p>
-      <p class="loc">📍 {PROFILE.location}</p>
+      <p class="loc">
+        📍 <span class="lang-zh">{PROFILE.location.zh}</span><span class="lang-en">{PROFILE.location.en}</span>
+      </p>
     </article>
 
     <!-- 博客统计 -->
     <article class="card reveal">
       <div class="spot"></div>
-      <h3>Blog</h3>
+      <h3><span class="lang-zh">{UI.card.blog.zh}</span><span class="lang-en">{UI.card.blog.en}</span></h3>
       <div class="stats-row">
         <div>
           <p class="stat-num">{posts.length}</p>
-          <p class="stat-label">篇文章</p>
+          <p class="stat-label">
+            <span class="lang-zh">{UI.card.postsUnit.zh}</span><span class="lang-en">{UI.card.postsUnit.en}</span>
+          </p>
         </div>
         <div>
           <p class="stat-num">{new Set(posts.map((p) => p.data.category)).size}</p>
-          <p class="stat-label">个分类</p>
+          <p class="stat-label">
+            <span class="lang-zh">{UI.card.categoriesUnit.zh}</span><span class="lang-en">{UI.card.categoriesUnit.en}</span>
+          </p>
         </div>
       </div>
     </article>
@@ -58,7 +71,7 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
     <!-- 最新文章 -->
     <article class="card card-wide card-tall reveal">
       <div class="spot"></div>
-      <h3>Latest Posts</h3>
+      <h3><span class="lang-zh">{UI.card.latestPosts.zh}</span><span class="lang-en">{UI.card.latestPosts.en}</span></h3>
       <ul class="posts-mini">
         {latest.map((p) => (
           <li>
@@ -67,45 +80,61 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
           </li>
         ))}
       </ul>
-      <a class="more-link" href="/blog/">全部 {posts.length} 篇 →</a>
+      <a class="more-link" href="/blog/">
+        <span class="lang-zh">全部 {posts.length} 篇 →</span><span class="lang-en">All {posts.length} posts →</span>
+      </a>
     </article>
 
     <!-- 技术栈 -->
     <article class="card card-wide reveal">
       <div class="spot"></div>
-      <h3>Tech Stack</h3>
+      <h3><span class="lang-zh">{UI.card.techStack.zh}</span><span class="lang-en">{UI.card.techStack.en}</span></h3>
       <div class="tags">
-        {PROFILE.stack.map((s) => <span class="tag">{s}</span>)}
+        <div class="lang-zh tags">
+          {PROFILE.stack.zh.map((s) => <span class="tag">{s}</span>)}
+        </div>
+        <div class="lang-en tags">
+          {PROFILE.stack.en.map((s) => <span class="tag">{s}</span>)}
+        </div>
       </div>
     </article>
 
     <!-- 正在关注 -->
     <article class="card card-wide reveal">
       <div class="spot"></div>
-      <h3>Now / 正在关注</h3>
-      <ul class="now-list">
-        {PROFILE.now.map((n) => <li>{n}</li>)}
+      <h3><span class="lang-zh">{UI.card.now.zh}</span><span class="lang-en">{UI.card.now.en}</span></h3>
+      <ul class="now-list lang-zh">
+        {PROFILE.now.zh.map((n) => <li>{n}</li>)}
+      </ul>
+      <ul class="now-list lang-en">
+        {PROFILE.now.en.map((n) => <li>{n}</li>)}
       </ul>
     </article>
   </section>
 
-  <script is:inline define:vars={{ roles: PROFILE.roles, tz: PROFILE.timezone }}>
-    // 打字机
+  <script is:inline define:vars={{ rolesZh: PROFILE.roles.zh, rolesEn: PROFILE.roles.en, tz: PROFILE.timezone }}>
+    // 打字机：随 <html data-lang> 切换词库
     const el = document.getElementById('typed');
     let ri = 0, ci = 0, del = false;
+    const words = () => (document.documentElement.dataset.lang === 'en' ? rolesEn : rolesZh);
     (function tick() {
-      const word = roles[ri];
+      const list = words();
+      const word = list[ri % list.length];
       el.textContent = word.slice(0, ci);
       if (!del && ci < word.length) { ci++; setTimeout(tick, 70); }
       else if (!del) { del = true; setTimeout(tick, 1600); }
       else if (ci > 0) { ci--; setTimeout(tick, 35); }
-      else { del = false; ri = (ri + 1) % roles.length; setTimeout(tick, 300); }
+      else { del = false; ri = (ri + 1) % list.length; setTimeout(tick, 300); }
     })();
-    // 本地时钟
+    window.addEventListener('langchange', () => { ci = 0; del = false; });
+    // 本地时钟：语言切换时同步 locale
     const clock = document.getElementById('clock');
-    (function updateClock() {
-      clock.textContent = new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', timeZone: tz });
-      setTimeout(updateClock, 10000);
-    })();
+    function updateClock() {
+      const loc = document.documentElement.dataset.lang === 'en' ? 'en-US' : 'zh-CN';
+      clock.textContent = new Date().toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit', timeZone: tz });
+    }
+    updateClock();
+    setInterval(updateClock, 10000);
+    window.addEventListener('langchange', updateClock);
   </script>
 </Base>
