@@ -18,20 +18,16 @@ export const PROFILE = {
   name: 'Rivyr',
   // 打字机效果轮播的身份标签
   roles: {
-    zh: ['开发者', 'AI 爱好者', '全栈工程师', '自动化控'],
-    en: ['Developer', 'AI Enthusiast', 'Full-Stack Engineer', 'Automation Lover'],
+    zh: ['前端工程师', '全栈开发者', 'AI 编程实践者', '团队 Leader'],
+    en: ['Frontend Engineer', 'Full-Stack Developer', 'AI-Augmented Coder', 'Team Lead'],
   },
   // 首页个人介绍（支持多段）
   bio: {
     zh: [
-      '你好，我是 Rivyr，一名开发者。',
-      '关注前端工程、AI/LLM 应用与自动化工具，喜欢把重复的事情交给代码。',
-      '这里记录我的项目、文章和一路踩过的坑。',
+      '瑞沃（Rivyr），10年+ 前端/全栈工程师，现服务于京东，负责亿级流量收银台核心链路，此前曾服务于理想汽车。深耕 React / TypeScript / Node.js 与跨端开发，带过团队、立过规范，从 Web2 大厂到 Web3 出海都打过仗。如今全力拥抱 AI 编程，用 AI 重构开发方式。',
     ],
     en: [
-      "Hi, I'm Rivyr, a developer.",
-      'I work on frontend engineering, AI/LLM applications, and automation — I like handing repetitive work over to code.',
-      'This is where I keep my projects, articles, and the pitfalls I ran into along the way.',
+      'Rivyr — frontend/full-stack engineer with 10+ years of experience, currently serving JD.com on the billion-traffic cashier payment pipeline, previously at Li Auto. Deep in the React / TypeScript / Node.js ecosystem and cross-platform development; led teams, set engineering standards, shipped products from big-tech Web2 to Web3. Currently all-in on AI-assisted development.',
     ],
   },
   location: { zh: '地球某处', en: 'Somewhere, Earth' },
