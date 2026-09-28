@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "Github Flow"
-date: 2019-09-05
 category: "git"
 tags:
   - "git"

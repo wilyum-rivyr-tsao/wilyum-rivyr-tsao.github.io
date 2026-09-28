@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "start ssh for ubuntu"
-date: 2017-09-09
 category: "Environment"
 tags:
   - "Environment"

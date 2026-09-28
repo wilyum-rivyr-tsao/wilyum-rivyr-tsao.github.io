@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "Redirect and Alias"
-date: 2020-02-01
 category: "vue-router"
 tags:
   - "vue-router"

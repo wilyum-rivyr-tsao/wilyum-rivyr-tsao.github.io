@@ -204,7 +204,6 @@ h1.name { font-size: 34px; letter-spacing: 0.5px; }
   display: block; transition: color 0.2s;
 }
 .posts-mini a:hover { color: var(--accent); }
-.posts-mini time { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
 .more-link {
   display: inline-block; margin-top: 6px; font-size: 13.5px;
   color: var(--accent); text-decoration: none;
@@ -224,11 +223,27 @@ footer.site-footer a { color: var(--accent); text-decoration: none; }
 
 /* ---------- 博客列表 ---------- */
 .page-title { font-size: 30px; margin: 10px 0 26px; }
-.year-group { margin-bottom: 34px; }
-.year-group h2 {
+/* 标签筛选条（纯前端 JS 筛选，无 JS 时全部展示） */
+.tag-filter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 30px; }
+.tag-filter .filter-label { font-size: 13px; color: var(--text-dim); margin-right: 2px; }
+.filter-btn {
+  font-family: var(--font); font-size: 12.5px; padding: 5px 12px; border-radius: 8px;
+  cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s;
+  background: rgba(77, 215, 208, 0.1); color: var(--accent-2);
+  border: 1px solid rgba(77, 215, 208, 0.25);
+}
+.filter-btn sup { font-size: 10px; margin-left: 4px; opacity: 0.7; }
+.filter-btn:hover { background: rgba(77, 215, 208, 0.2); }
+.filter-btn.active {
+  background: rgba(124, 108, 255, 0.2); color: var(--accent);
+  border-color: rgba(124, 108, 255, 0.5);
+}
+.cat-group { margin-bottom: 34px; }
+.cat-group h2 {
   font-family: var(--mono); font-size: 16px; color: var(--accent);
   margin-bottom: 12px;
 }
+.cat-group h2 .cat-count { font-size: 12px; color: var(--text-dim); font-weight: 400; }
 .post-row {
   display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
   padding: 12px 16px; border-radius: 12px; transition: background 0.2s;
@@ -236,14 +251,13 @@ footer.site-footer a { color: var(--accent); text-decoration: none; }
 .post-row:hover { background: var(--card); }
 .post-row a { color: var(--text); text-decoration: none; flex: 1; }
 .post-row a:hover { color: var(--accent); }
-.post-row time { font-family: var(--mono); font-size: 12.5px; color: var(--text-dim); white-space: nowrap; }
-.post-row .cat { font-size: 12px; color: var(--accent-2); white-space: nowrap; }
 
 /* ---------- 文章页 ---------- */
 article.post { max-width: 760px; margin: 0 auto; }
 article.post h1 { font-size: 30px; margin-bottom: 8px; }
 .post-meta { color: var(--text-dim); font-size: 13.5px; margin-bottom: 30px; font-family: var(--mono); }
 .post-meta .tag { margin-right: 6px; }
+.post-meta a.tag { text-decoration: none; }
 .prose h2 { margin: 34px 0 14px; font-size: 22px; border-left: 3px solid var(--accent); padding-left: 12px; }
 .prose h3 { margin: 26px 0 10px; font-size: 18px; }
 .prose p { margin: 14px 0; }

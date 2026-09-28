@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "Commonly used regex"
-date: 2019-06-27
 category: "Regex"
 tags:
   - "regex"

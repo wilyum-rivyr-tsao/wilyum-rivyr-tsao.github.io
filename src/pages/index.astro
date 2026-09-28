@@ -3,10 +3,10 @@ import Base from '../layouts/Base.astro';
 import { PROFILE, UI } from '../consts';
 import { getCollection } from 'astro:content';
 
+// 文章无发布日期；"最新文章"卡取文件名（post.id）字典序前 4 篇作为稳定顺序
 const posts = (await getCollection('blog'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => a.id.localeCompare(b.id));
 const latest = posts.slice(0, 4);
-const fmt = (d: Date) => d.toISOString().slice(0, 10);
 ---
 <Base>
   <section class="bento" aria-label="个人主页 / Home">
@@ -76,7 +76,6 @@ const fmt = (d: Date) => d.toISOString().slice(0, 10);
         {latest.map((p) => (
           <li>
             <a href={`/blog/${p.id}/`}>{p.data.title}</a>
-            <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
           </li>
         ))}
       </ul>

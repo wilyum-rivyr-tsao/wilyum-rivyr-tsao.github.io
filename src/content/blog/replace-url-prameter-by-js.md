@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "replace url prameter by js"
-date: 2017-09-02
 category: "JS sinppet"
 tags:
   - "JS snippet"

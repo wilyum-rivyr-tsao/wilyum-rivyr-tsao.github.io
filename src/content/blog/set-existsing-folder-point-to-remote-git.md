@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "set-existsing-folder-point-to-remote-git"
-date: 2017-04-20
 category: "git"
 tags:
   - "git"

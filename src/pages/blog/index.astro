@@ -4,32 +4,76 @@ import { UI } from '../../consts';
 import { getCollection } from 'astro:content';
 
 const posts = (await getCollection('blog'))
-  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 
-const byYear = new Map<number, typeof posts>();
+// 按分类分组：分类顺序按文章数量降序（数量相同按分类名字典序），组内按标题排序
+const byCat = new Map<string, typeof posts>();
 posts.forEach((p) => {
-  const y = p.data.date.getFullYear();
-  if (!byYear.has(y)) byYear.set(y, []);
-  byYear.get(y)!.push(p);
+  if (!byCat.has(p.data.category)) byCat.set(p.data.category, []);
+  byCat.get(p.data.category)!.push(p);
 });
-const years = [...byYear.keys()].sort((a, b) => b - a);
-const fmt = (d: Date) => d.toISOString().slice(0, 10);
+const cats = [...byCat.entries()]
+  .sort((a, b) => b[1].length - a[1].length || a[0].localeCompare(b[0]));
+
+// 标签聚合：按出现次数降序（次数相同按标签名字典序）
+const tagCount = new Map<string, number>();
+posts.forEach((p) => p.data.tags.forEach((t) => tagCount.set(t, (tagCount.get(t) ?? 0) + 1)));
+const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
 ---
 <Base title={UI.blogPage.title.zh} description={UI.blogPage.description.zh}>
   <h1 class="page-title">
     <span class="lang-zh">{UI.blogPage.title.zh}</span><span class="lang-en">{UI.blogPage.title.en}</span>
   </h1>
-  {years.map((y) => (
-    <section class="year-group">
-      <h2>{y}</h2>
-      {byYear.get(y)!.map((p) => (
-        <div class="post-row">
-          <a href={`/blog/${p.id}/`}>{p.data.title}</a>
-          <span class="lang-badge">{p.data.lang === 'zh' ? '中文' : 'EN'}</span>
-          <span class="cat">{p.data.category}</span>
-          <time datetime={p.data.date.toISOString()}>{fmt(p.data.date)}</time>
-        </div>
-      ))}
-    </section>
-  ))}
+  <div class="tag-filter">
+    <span class="filter-label">
+      <span class="lang-zh">{UI.blogPage.filterLabel.zh}</span><span class="lang-en">{UI.blogPage.filterLabel.en}</span>
+    </span>
+    <button class="filter-btn" data-tag="" type="button">
+      <span class="lang-zh">{UI.blogPage.filterAll.zh}</span><span class="lang-en">{UI.blogPage.filterAll.en}</span>
+    </button>
+    {tags.map(([tag, n]) => (
+      <button class="filter-btn" data-tag={tag} type="button">{tag}<sup>{n}</sup></button>
+    ))}
+  </div>
+  <div id="post-list">
+    {cats.map(([cat, list]) => (
+      <section class="cat-group">
+        <h2>{cat} <span class="cat-count">{list.length}</span></h2>
+        {list.map((p) => (
+          <div class="post-row" data-tags={p.data.tags.join('|')}>
+            <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+            <span class="lang-badge">{p.data.lang === 'zh' ? '中文' : 'EN'}</span>
+          </div>
+        ))}
+      </section>
+    ))}
+  </div>
+  <script is:inline>
+    // 标签筛选：纯前端显隐；支持 ?tag=xxx 直达（文章详情页的 tag 链接带参回来）
+    (function () {
+      var btns = document.querySelectorAll('.tag-filter .filter-btn');
+      var rows = document.querySelectorAll('#post-list .post-row');
+      var groups = document.querySelectorAll('#post-list .cat-group');
+      function apply(tag) {
+        btns.forEach(function (b) { b.classList.toggle('active', b.dataset.tag === tag); });
+        rows.forEach(function (r) {
+          r.style.display = !tag || (r.dataset.tags || '').split('|').indexOf(tag) !== -1 ? '' : 'none';
+        });
+        groups.forEach(function (g) {
+          var visible = Array.prototype.some.call(g.querySelectorAll('.post-row'), function (r) {
+            return r.style.display !== 'none';
+          });
+          g.style.display = visible ? '' : 'none';
+        });
+        var url = new URL(window.location.href);
+        if (tag) url.searchParams.set('tag', tag); else url.searchParams.delete('tag');
+        history.replaceState(null, '', url);
+      }
+      btns.forEach(function (b) {
+        b.addEventListener('click', function () { apply(b.dataset.tag || ''); });
+      });
+      var initial = new URLSearchParams(window.location.search).get('tag') || '';
+      apply(initial);
+    })();
+  </script>
 </Base>

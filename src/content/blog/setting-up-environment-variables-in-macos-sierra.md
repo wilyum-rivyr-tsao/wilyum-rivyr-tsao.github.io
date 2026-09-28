@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "Setting up Environment Variables in MacOS Sierra"
-date: 2017-04-25
 category: "Environment"
 tags:
   - "Environment"

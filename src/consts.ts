@@ -54,11 +54,11 @@ export const UI = {
   card: {
     localTime: { zh: '本地时间', en: 'Local Time' },
     blog: { zh: '博客', en: 'Blog' },
-    latestPosts: { zh: '最新文章', en: 'Latest Posts' },
+    latestPosts: { zh: '文章', en: 'Posts' },
     techStack: { zh: '技术栈', en: 'Tech Stack' },
     now: { zh: '正在关注', en: 'Now' },
     postsUnit: { zh: '篇文章', en: 'posts' },
-    categoriesUnit: { zh: '个分类', en: 'categories' },
+    tagsUnit: { zh: '个标签', en: 'tags' },
   },
   blogPage: {
     title: { zh: '✎ 文章', en: '✎ Posts' },
@@ -67,5 +67,7 @@ export const UI = {
       en: "Archive of Rivyr's technical articles",
     },
     back: { zh: '← 返回文章列表', en: '← Back to all posts' },
+    filterLabel: { zh: '按标签筛选：', en: 'Filter by tag:' },
+    filterAll: { zh: '全部', en: 'All' },
   },
 };

@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "how to decoupling routes in vue component"
-date: 2020-02-04
 category: "vue-router"
 tags:
   - "vue-router"

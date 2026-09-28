@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "Update data of vue page when router params updated"
-date: 2020-02-24
 category: "vue-router"
 tags:
   - "vue-router"

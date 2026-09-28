@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "The explain of vue-router guards fllow the sequnce of vue-router call stack"
-date: 2020-02-27
 category: "vue-router"
 tags:
   - "vue-router"

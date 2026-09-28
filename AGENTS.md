@@ -16,12 +16,12 @@
 ```
 src/
   consts.ts            # ⭐ 所有个人信息/介绍/技能/社交链接都在这里（{ zh, en } 双语结构，含 UI 文案表），用户最常改的文件
-  content.config.ts    # 博客内容集合（glob loader, schema: title/date/tags/category/lang）
-  content/blog/*.md    # 21 篇从 Jekyll 迁移的文章（中英混合，2017-2020；front matter 有 lang: zh|en）
+  content.config.ts    # 博客内容集合（glob loader, schema: title/tags/category/lang，无日期字段）
+  content/blog/*.md    # 21 篇从 Jekyll 迁移的文章（中英混合；front matter 有 lang: zh|en，无 date）
   layouts/Base.astro   # 全站布局：导航、主题切换、语言切换、追光/滚动浮现脚本
   pages/index.astro    # 首页 bento 网格（打字机双词库、时钟随语言换 locale）
-  pages/blog/index.astro      # 文章列表（按年份分组 + 语言徽章）
-  pages/blog/[...slug].astro  # 文章详情（语言徽章，正文保持原文）
+  pages/blog/index.astro      # 文章列表（按分类分组：分类按文章数降序、组内按标题排序；顶部标签筛选条，纯前端 JS + ?tag= 参数）
+  pages/blog/[...slug].astro  # 文章详情（分类 + 语言徽章 + tags 链接回列表页筛选，正文保持原文，无日期）
   styles/global.css    # 全部样式，CSS 变量主题（--bg/--accent 等），含 .lang-zh/.lang-en 显隐规则
 public/                # avatar.jpg, favicon.svg, llms.txt（双语）, robots.txt
 ```
@@ -33,6 +33,7 @@ public/                # avatar.jpg, favicon.svg, llms.txt（双语）, robots.t
 3. 不改部署方式；不引入重型依赖（保持 Astro 零 JS 默认）。
 4. 动画必须兼容 `prefers-reduced-motion`。
 5. 网络：本机代理 `http://127.0.0.1:7897`（git 全局已配，npm 若失败可 `npm config set proxy`）。
+6. **文章不展示发布日期**：content schema 无 `date` 字段，front matter 也不要加；首页"最新文章"卡按文件名（post.id）字典序取前 4 篇作为稳定顺序；文章详情页的 tag 链接指向 `/blog/?tag=<标签>` 触发列表页筛选。
 
 ## 常用命令
 
