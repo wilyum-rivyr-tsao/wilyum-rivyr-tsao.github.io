@@ -1,9 +1,10 @@
 ---
 lang: en
 title: "use nodejs server to serve & test react app on centos 6"
-category: "React"
 tags:
-  - "Node.js"
+  - "nodejs"
+  - "centos"
+  - "react"
 ---
 
 https://www.rackaid.com/blog/linux-screen-tutorial-and-how-to/

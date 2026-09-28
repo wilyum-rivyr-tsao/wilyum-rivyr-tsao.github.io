@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "The explain of vue-router guards fllow the sequnce of vue-router call stack"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "导航守卫"
 ---
 
 1. Navigation triggered.

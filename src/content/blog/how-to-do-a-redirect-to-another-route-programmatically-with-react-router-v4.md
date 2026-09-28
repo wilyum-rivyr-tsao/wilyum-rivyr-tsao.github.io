@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "How to do a redirect to another route programmatically with react router v4"
-category: "React"
 tags:
-  - "Node.js"
+  - "react-router"
+  - "react"
 ---
 
 ### How to do a redirect to another route programmatically with react-router v4.

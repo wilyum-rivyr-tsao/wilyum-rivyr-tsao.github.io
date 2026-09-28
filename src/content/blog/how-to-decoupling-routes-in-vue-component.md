@@ -1,9 +1,10 @@
 ---
 lang: en
 title: "how to decoupling routes in vue component"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "vue"
+  - "组件解耦"
 ---
 
 Have you ever meet a scenario that you need receive params from url. Well then you can use this.\$route.params like this:

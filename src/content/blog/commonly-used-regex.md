@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Commonly used regex"
-category: "Regex"
 tags:
   - "regex"
+  - "表单校验"
 ---
 
 ```js

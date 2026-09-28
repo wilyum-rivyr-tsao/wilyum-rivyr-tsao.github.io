@@ -3,10 +3,12 @@ import Base from '../layouts/Base.astro';
 import { PROFILE, UI } from '../consts';
 import { getCollection } from 'astro:content';
 
-// 文章无发布日期；"最新文章"卡取文件名（post.id）字典序前 4 篇作为稳定顺序
+// 文章无发布日期；"文章"卡取按标题排序的前 4 篇作为稳定顺序
 const posts = (await getCollection('blog'))
-  .sort((a, b) => a.id.localeCompare(b.id));
+  .sort((a, b) => a.data.title.localeCompare(b.data.title));
 const latest = posts.slice(0, 4);
+// 标签统计：聚合全部文章的 tags 去重计数
+const tagTotal = new Set(posts.flatMap((p) => p.data.tags)).size;
 ---
 <Base>
   <section class="bento" aria-label="个人主页 / Home">
@@ -60,9 +62,9 @@ const latest = posts.slice(0, 4);
           </p>
         </div>
         <div>
-          <p class="stat-num">{new Set(posts.map((p) => p.data.category)).size}</p>
+          <p class="stat-num">{tagTotal}</p>
           <p class="stat-label">
-            <span class="lang-zh">{UI.card.categoriesUnit.zh}</span><span class="lang-en">{UI.card.categoriesUnit.en}</span>
+            <span class="lang-zh">{UI.card.tagsUnit.zh}</span><span class="lang-en">{UI.card.tagsUnit.en}</span>
           </p>
         </div>
       </div>

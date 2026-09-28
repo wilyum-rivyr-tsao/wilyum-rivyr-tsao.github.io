@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Setting up Environment Variables in MacOS Sierra"
-category: "Environment"
 tags:
-  - "Environment"
+  - "macos"
+  - "环境变量"
 ---
 
 #### Displaying current Environment Variables

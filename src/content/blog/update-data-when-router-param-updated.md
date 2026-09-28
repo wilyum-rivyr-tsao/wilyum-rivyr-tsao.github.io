@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Update data of vue page when router params updated"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "vue"
 ---
 
 When router params updated the Vue will not run the lifecyle agian except the page refresh.How can we fetch data when the param (such as /anypath/:id)changed?

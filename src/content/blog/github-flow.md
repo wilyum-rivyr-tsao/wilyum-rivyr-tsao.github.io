@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Github Flow"
-category: "git"
 tags:
   - "git"
+  - "git-flow"
 ---
 
 语义化版本：

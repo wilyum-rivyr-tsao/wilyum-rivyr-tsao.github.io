@@ -12,7 +12,7 @@ export const SITE = {
 };
 
 // 技术栈为语言中立词汇，两种语言共用同一份
-const STACK = ['TypeScript', 'React', 'Vue', 'Node.js', 'Python', 'Astro', 'Docker', 'LLM / RAG', 'n8n', 'GitHub Actions'];
+const STACK = ['TypeScript', 'React', 'Vue', 'Node.js', 'Docker', 'GitHub Actions'];
 
 export const PROFILE = {
   name: 'Rivyr',

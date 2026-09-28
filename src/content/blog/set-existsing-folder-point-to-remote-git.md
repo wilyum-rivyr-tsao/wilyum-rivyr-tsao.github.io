@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "set-existsing-folder-point-to-remote-git"
-category: "git"
 tags:
   - "git"
+  - "github"
 ---
 
 ``` bash

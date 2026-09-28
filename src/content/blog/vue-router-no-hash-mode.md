@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Vue Router No Hash Mode"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "history-mode"
 ---
 
 To get rid of # in URL we need to use `history.pushState`.We can simply config in it when new vue-router istance:

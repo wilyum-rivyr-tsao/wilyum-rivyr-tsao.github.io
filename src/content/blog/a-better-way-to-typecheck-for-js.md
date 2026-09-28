@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "A better way to typecheck for JS"
-category: "JS sinppet"
 tags:
-  - "JS snippet"
+  - "js-技巧"
+  - "type-checking"
 ---
 
 ```js

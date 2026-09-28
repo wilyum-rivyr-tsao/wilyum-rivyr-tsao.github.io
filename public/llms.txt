@@ -6,7 +6,7 @@
 ## 页面 / Pages
 
 - [首页 / Home](https://wilyum-rivyr-tsao.github.io/): 个人介绍、技术栈、最新文章 / Bio, tech stack, and latest posts
-- [文章 / Blog](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（中英混合，按分类分组，可按标签筛选，每篇带语言徽章）/ Technical blog archive (mixed Chinese and English, grouped by category with tag filtering; each post marked with a language badge)
+- [文章 / Blog](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（中英混合，平铺列表按标题排序，顶部可按标签筛选，每篇带语言徽章与标签；无发布日期/分类概念）/ Technical blog archive (mixed Chinese and English, flat list sorted by title with tag filtering at the top; each post marked with a language badge and tags; no dates or categories)
 
 ## 说明 / Notes
 

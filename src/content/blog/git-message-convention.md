@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "git message convention"
-category: "git"
 tags:
   - "git"
+  - "提交规范"
 ---
 
 ### Commit Message Format

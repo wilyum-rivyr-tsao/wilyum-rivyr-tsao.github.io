@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Define page Name and authtication in router"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "鉴权"
 ---
 
 When we are building a vue app. we may use a public header component.The title should follow the router path change.we can simple use meta fields in the route.Here's an example

@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "set Welcom info for CentOS"
-category: "Environment"
 tags:
-  - "Environment"
+  - "linux"
+  - "centos"
 ---
 
 ### set Welcom info for centos

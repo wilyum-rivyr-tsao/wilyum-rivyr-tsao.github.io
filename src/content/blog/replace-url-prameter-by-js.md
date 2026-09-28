@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "replace url prameter by js"
-category: "JS sinppet"
 tags:
-  - "JS snippet"
+  - "js-技巧"
+  - "regex"
 ---
 
 ```js

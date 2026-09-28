@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Redirect and Alias"
-category: "vue-router"
 tags:
   - "vue-router"
+  - "重定向"
 ---
 
 ## 重定向

@@ -1,7 +1,6 @@
 ---
 lang: en
 title: "font not found error happens when created a new file under subfolder in of nuxt pages folder"
-category: "Project_summary_reports"
 tags:
   - "nuxt"
   - "scss"

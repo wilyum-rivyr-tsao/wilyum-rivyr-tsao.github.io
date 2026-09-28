@@ -1,9 +1,9 @@
 ---
 lang: en
 title: "Optimizing"
-category: "Optimize"
 tags:
-  - "Optimize"
+  - "性能优化"
+  - "浏览器渲染"
 ---
 
 #### 1. browser limited the number of network request, so reduce request number will speed up web page speed.  

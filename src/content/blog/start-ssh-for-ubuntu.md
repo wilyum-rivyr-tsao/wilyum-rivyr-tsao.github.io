@@ -1,9 +1,10 @@
 ---
 lang: en
 title: "start ssh for ubuntu"
-category: "Environment"
 tags:
-  - "Environment"
+  - "linux"
+  - "ubuntu"
+  - "ssh"
 ---
 
  1. sudo apt-get install openssh-server 

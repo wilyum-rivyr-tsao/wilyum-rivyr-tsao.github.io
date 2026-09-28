@@ -1,7 +1,9 @@
 ---
 lang: zh
 title: "如何设置mac的PATH（$PATH）环境变量"
-category: "Environment"
+tags:
+  - "macos"
+  - "环境变量"
 ---
 
 ### 临时修改当前命令行的的环境变量

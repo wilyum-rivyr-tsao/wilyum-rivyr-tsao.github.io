@@ -20,7 +20,6 @@ const { Content } = await render(post);
     </p>
     <h1>{post.data.title}</h1>
     <p class="post-meta">
-      {post.data.category}
       <span class="lang-badge">{post.data.lang === 'zh' ? '中文' : 'EN'}</span>
       {post.data.tags.map((t) => <a class="tag" href={`/blog/?tag=${encodeURIComponent(t)}`}>{t}</a>)}
     </p>
