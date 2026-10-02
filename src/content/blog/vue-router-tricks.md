@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "vue-router 实战六则"
+title: "Six Vue Router Tricks from the Field"
 tags:
   - "vue"
   - "vue-router"

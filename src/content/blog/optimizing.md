@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "网页性能优化要点"
+title: "Web Performance Optimization Essentials"
 tags:
   - "性能优化"
   - "浏览器渲染"

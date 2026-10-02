@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "开发环境速查：PATH、SSH 与终端欢迎语"
+title: "Dev Environment Cheatsheet: PATH, SSH & Terminal Greetings"
 tags:
   - "环境配置"
   - "macos"

@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "Git Flow 分支模型"
+title: "GitHub Flow"
 tags:
   - "git"
   - "git-flow"

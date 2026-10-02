@@ -1,5 +1,5 @@
 ---
-title: "从零到一：构建 React AI 聊天 Hook"
+title: "From Zero to One: Building a React AI Chat Hook"
 lang: both
 tags:
   - "react"

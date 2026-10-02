@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "JavaScript 实用片段集"
+title: "Handy JavaScript Snippets"
 tags:
   - "javascript"
   - "snippets"

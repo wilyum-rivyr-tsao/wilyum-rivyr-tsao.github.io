@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "Git 后悔药：改写历史与误删恢复"
+title: "Git Undo Guide: Rewriting History & Recovering Lost Commits"
 tags:
   - "git"
 ---

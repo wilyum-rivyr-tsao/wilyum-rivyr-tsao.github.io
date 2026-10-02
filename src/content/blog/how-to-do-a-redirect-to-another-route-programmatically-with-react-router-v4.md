@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "在 React Router v4 中编程式跳转到另一个路由"
+title: "Programmatic Navigation in React Router v4"
 tags:
   - "react-router"
   - "react"

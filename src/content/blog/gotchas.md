@@ -1,6 +1,6 @@
 ---
 lang: both
-title: "踩坑速记"
+title: "Frontend Gotchas: el-select & Nuxt"
 tags:
   - "vue"
   - "nuxt"
