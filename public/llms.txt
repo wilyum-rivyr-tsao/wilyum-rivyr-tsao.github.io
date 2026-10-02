@@ -6,13 +6,13 @@
 ## 页面 / Pages
 
 - [首页 / Home](https://wilyum-rivyr-tsao.github.io/): 个人介绍、技术栈、最新文章 / Bio, tech stack, and latest posts
-- [文章 / Blog](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（中英混合，平铺列表按标题排序，顶部可按标签筛选，每篇带语言徽章与标签；无发布日期/分类概念）/ Technical blog archive (mixed Chinese and English, flat list sorted by title with tag filtering at the top; each post marked with a language badge and tags; no dates or categories)
+- [文章 / Blog](https://wilyum-rivyr-tsao.github.io/blog/): 技术博客归档（当前 18 篇；新文章均为中英双语，部分早期文章为单语言；平铺列表按标题排序，顶部可按标签筛选，单语言文章带语言徽章；无发布日期/分类概念）/ Technical blog archive (18 posts; new posts are fully bilingual, some earlier posts are single-language; flat list sorted by title with tag filtering at the top; single-language posts carry a language badge; no dates or categories)
 
 ## 说明 / Notes
 
 - 全站为静态 HTML，语义化标签；中英双语文本均包含在 HTML 中（通过 `<html data-lang>` 切换显隐），无需执行 JS 即可读取任一语言。
 - Fully static HTML with semantic tags. Both Chinese and English text are present in the markup (toggled via the `data-lang` attribute on `<html>`), so either language can be read without executing JS.
-- 博客正文保持原文语言（中文或英文），front matter 中的 `lang` 字段标明每篇语言。
-- Blog posts keep their original language (Chinese or English); the `lang` field in front matter marks each post's language.
+- 新文章均为中英双语（front matter `lang: both`），正文用 `<div class="lang-zh">` / `<div class="lang-en">` 双块包裹两种语言；早期单语言文章 front matter 用 `lang: zh` 或 `lang: en` 标注，并带语言徽章。
+- New posts are fully bilingual (front matter `lang: both`), with the body wrapped in `<div class="lang-zh">` / `<div class="lang-en">` blocks; earlier single-language posts are marked `lang: zh` or `lang: en` and carry a language badge.
 - Sitemap: https://wilyum-rivyr-tsao.github.io/sitemap-index.xml
 - 联系方式见首页 GitHub / X 链接。/ Contact links (GitHub / X) are on the home page.

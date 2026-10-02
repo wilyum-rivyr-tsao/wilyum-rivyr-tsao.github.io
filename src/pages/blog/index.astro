@@ -34,7 +34,9 @@ const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCo
         <span class="post-tags">
           {p.data.tags.map((t) => <span class="tag">{t}</span>)}
         </span>
-        <span class="lang-badge">{p.data.lang === 'zh' ? '中文' : 'EN'}</span>
+        {p.data.lang !== 'both' && (
+          <span class="lang-badge">{p.data.lang === 'zh' ? '中文' : 'EN'}</span>
+        )}
       </div>
     ))}
   </div>
