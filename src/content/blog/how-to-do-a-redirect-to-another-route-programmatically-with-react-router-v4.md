@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Programmatic Navigation in React Router v4"
+title:
+    zh: "在 React Router v4 中编程式跳转"
+    en: "Programmatic Navigation in React Router v4"
 tags:
   - "react-router"
   - "react"

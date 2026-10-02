@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "GitHub Flow"
+title:
+    zh: "GitHub Flow 工作流"
+    en: "GitHub Flow"
 tags:
   - "git"
   - "git-flow"

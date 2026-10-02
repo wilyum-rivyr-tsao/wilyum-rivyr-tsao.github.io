@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Semantic Versioning: How to Name Software Versions"
+title:
+    zh: "语义化版本：如何命名软件版本"
+    en: "Semantic Versioning: How to Name Software Versions"
 tags:
   - "语义化版本"
   - "版本管理"

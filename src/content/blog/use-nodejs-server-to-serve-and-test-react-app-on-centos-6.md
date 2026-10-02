@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Serving & Testing a React App with Node.js on CentOS 6"
+title:
+    zh: "在 CentOS 6 上用 Node.js 部署并测试 React 应用"
+    en: "Serving & Testing a React App with Node.js on CentOS 6"
 tags:
   - "nodejs"
   - "centos"

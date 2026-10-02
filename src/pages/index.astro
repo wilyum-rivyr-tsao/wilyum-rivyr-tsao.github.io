@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 
 // 文章无发布日期；"文章"卡取按标题排序的前 4 篇作为稳定顺序
 const posts = (await getCollection('blog'))
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+  .sort((a, b) => a.data.title.zh.localeCompare(b.data.title.zh));
 const latest = posts.slice(0, 4);
 // 标签统计：聚合全部文章的 tags 去重计数
 const tagTotal = new Set(posts.flatMap((p) => p.data.tags)).size;
@@ -77,7 +77,7 @@ const tagTotal = new Set(posts.flatMap((p) => p.data.tags)).size;
       <ul class="posts-mini">
         {latest.map((p) => (
           <li>
-            <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+            <a href={`/blog/${p.id}/`}><span class="lang-zh">{p.data.title.zh}</span><span class="lang-en">{p.data.title.en}</span></a>
           </li>
         ))}
       </ul>

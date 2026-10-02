@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Frontend Gotchas: el-select & Nuxt"
+title:
+    zh: "前端踩坑速记：el-select 与 Nuxt"
+    en: "Frontend Gotchas: el-select & Nuxt"
 tags:
   - "vue"
   - "nuxt"

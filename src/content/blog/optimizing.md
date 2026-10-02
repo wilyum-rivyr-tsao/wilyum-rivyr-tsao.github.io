@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Web Performance Optimization Essentials"
+title:
+    zh: "网页性能优化要点"
+    en: "Web Performance Optimization Essentials"
 tags:
   - "性能优化"
   - "浏览器渲染"

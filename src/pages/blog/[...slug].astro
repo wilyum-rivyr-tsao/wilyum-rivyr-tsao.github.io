@@ -11,14 +11,14 @@ export async function getStaticPaths() {
 const { post } = Astro.props;
 const { Content } = await render(post);
 ---
-<Base title={post.data.title} description={post.data.title}>
+<Base title={post.data.title.zh} description={post.data.title.zh}>
   <article class="post">
     <p>
       <a class="back-link" href="/blog/">
         <span class="lang-zh">{UI.blogPage.back.zh}</span><span class="lang-en">{UI.blogPage.back.en}</span>
       </a>
     </p>
-    <h1>{post.data.title}</h1>
+    <h1><span class="lang-zh">{post.data.title.zh}</span><span class="lang-en">{post.data.title.en}</span></h1>
     <p class="post-meta">
       {post.data.lang !== 'both' && (
         <span class="lang-badge">{post.data.lang === 'zh' ? '中文' : 'EN'}</span>

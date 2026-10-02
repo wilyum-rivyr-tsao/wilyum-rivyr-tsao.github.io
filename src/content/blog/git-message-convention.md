@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Git Message Convention"
+title:
+    zh: "Git 提交信息规范"
+    en: "Git Message Convention"
 tags:
   - "git"
   - "提交规范"

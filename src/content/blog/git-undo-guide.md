@@ -1,6 +1,8 @@
 ---
 lang: both
-title: "Git Undo Guide: Rewriting History & Recovering Lost Commits"
+title:
+    zh: "Git 后悔药：改写历史与误删恢复"
+    en: "Git Undo Guide: Rewriting History & Recovering Lost Commits"
 tags:
   - "git"
 ---

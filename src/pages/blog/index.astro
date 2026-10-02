@@ -5,7 +5,7 @@ import { getCollection } from 'astro:content';
 
 // 平铺文章列表：无日期/分类概念，按标题排序
 const posts = (await getCollection('blog'))
-  .sort((a, b) => a.data.title.localeCompare(b.data.title));
+  .sort((a, b) => a.data.title.zh.localeCompare(b.data.title.zh));
 
 // 标签聚合：按出现次数降序（次数相同按标签名字典序）
 const tagCount = new Map<string, number>();
@@ -30,7 +30,7 @@ const tags = [...tagCount.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCo
   <div id="post-list">
     {posts.map((p) => (
       <div class="post-row" data-tags={p.data.tags.join('|')}>
-        <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+        <a href={`/blog/${p.id}/`}><span class="lang-zh">{p.data.title.zh}</span><span class="lang-en">{p.data.title.en}</span></a>
         <span class="post-tags">
           {p.data.tags.map((t) => <span class="tag">{t}</span>)}
         </span>
