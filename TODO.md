@@ -4,13 +4,8 @@
 
 ## 待办
 
-### 1. 同步知乎文章到博客
-- 需要用户提供知乎主页链接（zhihu.com/people/xxx）
-- 抓取专栏文章 → 转 markdown → `src/content/blog/`（front matter: title/tags/lang，**无 date**）
-- 注意去重、图片链接处理
-
-### 2. 撰写 30 篇项目经验文章
-- 只写正文时基于以下已确认标题；`lang: zh`、无 date、每篇 1000 字左右、第一人称经验总结风格
+### 1. 撰写 30 篇项目经验文章
+- 只写正文时基于以下已确认标题；`lang: zh`、无 date、每篇 1000 字左右、第一人称经验总结风格、每篇配 2-4 个 tags
 - 分批派发给 Kimi（每批 5-8 篇），Hermes 验收
 
 1. 亿级流量下的收银台前端架构：TN 跨端卡片实践
@@ -46,4 +41,7 @@
 
 ## Done
 
-（暂无）
+### ✅ 同步知乎文章到博客（2026-09-28 完成）
+- 知乎主页 10 篇文章：4 篇新文章已导入（react-ai-chat-hook / el-select-value-number-type / rewrite-git-commit-history / git-reset-hard-recovery）
+- 6 篇 vue-router 文章与已迁移旧文重复（相似度 32%-77%），跳过
+- 注意：知乎列表和正文均需登录态，抓取用的是本机 Chrome 已登录会话
