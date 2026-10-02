@@ -17,7 +17,7 @@
 src/
   consts.ts            # ⭐ 所有个人信息/介绍/技能/社交链接都在这里（{ zh, en } 双语结构，含 UI 文案表），用户最常改的文件
   content.config.ts    # 博客内容集合（glob loader, schema: title/tags/lang；tags 必填，lang: zh|en|both 默认 both，无日期/分类字段）
-  content/blog/*.md    # 18 篇文章（Jekyll 迁移 + 知乎同步；新文章均 lang: both 中英双语，旧文 lang: zh|en，无 date/category）
+  content/blog/*.md    # 12 篇文章（Jekyll 迁移 + 知乎同步，已全部合并/补写为 lang: both 中英双语，无 date/category）
   layouts/Base.astro   # 全站布局：导航、主题切换、语言切换、追光/滚动浮现脚本
   pages/index.astro    # 首页 bento 网格（打字机双词库、时钟随语言换 locale）
   pages/blog/index.astro      # 文章列表（平铺、按标题排序：标题 + 语言徽章（仅单语言文章）+ tags；顶部标签筛选条，纯前端 JS + ?tag= 参数）
@@ -33,7 +33,7 @@ public/                # avatar.jpg, favicon.svg, llms.txt（双语）, robots.t
 3. 不改部署方式；不引入重型依赖（保持 Astro 零 JS 默认）。
 4. 动画必须兼容 `prefers-reduced-motion`。
 5. 网络：本机代理 `http://127.0.0.1:7897`（git 全局已配，npm 若失败可 `npm config set proxy`）。
-6. **文章无发布日期、无分类，标签（tags）是唯一归类方式**：content schema 只有 title/tags/lang，tags 必填（至少 1 个）；front matter 也不要加 date/category；首页"文章"卡按标题排序取前 4 篇作为稳定顺序；文章详情页的 tag 链接指向 `/blog/?tag=<标签>` 触发列表页筛选；首页"N 个标签"统计由全站 tags 去重聚合。**每篇文章必须中英双语（lang: both），正文用 `<div class="lang-zh">` / `<div class="lang-en">` 双块分别包裹中文和英文全文**（div 与 markdown 内容之间留空行）；lang 为 both 的文章在列表/详情页不显示语言徽章，仅 zh/en 单语言旧文显示徽章。
+6. **文章无发布日期、无分类，标签（tags）是唯一归类方式**：content schema 只有 title/tags/lang，tags 必填（至少 1 个）；front matter 也不要加 date/category；首页"文章"卡按标题排序取前 4 篇作为稳定顺序；文章详情页的 tag 链接指向 `/blog/?tag=<标签>` 触发列表页筛选；首页"N 个标签"统计由全站 tags 去重聚合。**每篇文章必须中英双语（lang: both），正文用 `<div class="lang-zh">` / `<div class="lang-en">` 双块分别包裹中文和英文全文**（div 与 markdown 内容之间留空行）；lang 为 both 的文章在列表/详情页不显示语言徽章，仅 zh/en 单语言文章显示徽章（当前全站文章均为 both，已无徽章）。
 
 ## 常用命令
 

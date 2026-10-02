@@ -41,6 +41,13 @@
 
 ## Done
 
+### ✅ 博客文章合并与全量双语化（2026-10-02 完成，第二批）
+- vue-router 六篇合并为《vue-router 实战六则》（vue-router-tricks，props 解耦与参数更新两节已去重）
+- 踩坑两篇合并为《踩坑速记》（gotchas：el-select 类型 + Nuxt 字体路径，标题已重新拟为正常描述）
+- 7 篇单语言文章补齐双语（react-ai-chat-hook / git-message-convention / github-flow / 如何命名软件版本 / optimizing / react-router-v4 跳转 / centos6-nodejs）
+- 全站 12 篇文章均 lang: both，列表/详情页不再出现语言徽章；build 通过（14 页）
+- 第一批（上一批）：10 篇合并为 3 篇双语文（js-snippets / dev-env-cheatsheet / git-undo-guide）
+
 ### ✅ 同步知乎文章到博客（2026-09-28 完成）
 - 知乎主页 10 篇文章：4 篇新文章已导入（react-ai-chat-hook / el-select-value-number-type / rewrite-git-commit-history / git-reset-hard-recovery）
 - 6 篇 vue-router 文章与已迁移旧文重复（相似度 32%-77%），跳过

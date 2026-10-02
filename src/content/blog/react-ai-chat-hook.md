@@ -1,6 +1,6 @@
 ---
-title: "从零到一：构建React AI聊天Hook"
-lang: zh
+title: "从零到一：构建 React AI 聊天 Hook"
+lang: both
 tags:
   - "react"
   - "hooks"
@@ -8,13 +8,13 @@ tags:
   - "typescript"
 ---
 
-**技术背景与价值**
+<div class="lang-zh">
 
-在开发对话型AI项目时，我们需要对接AI接口，这时一个统一的React Hook 是不错的选择。
+## 技术背景与价值
 
-智能体服务。项目的核心需求包括：支持流式响应、多轮对话、文件上传以及动态切换智能体。虽然 OpenAI API已经成熟，但我们需要对接内部自研的 agent 服务，其采用 Server-Sent Events  (SSE)协议，并支持动态工具调用和思维链展示。
+在开发对话型 AI 项目时，我们需要对接 AI 接口，这时一个统一的 React Hook 是不错的选择。项目的核心需求包括：支持流式响应、多轮对话、文件上传以及动态切换智能体。虽然 OpenAI API 已经成熟，但我们需要对接内部自研的 agent 服务，其采用 Server-Sent Events（SSE）协议，并支持动态工具调用和思维链展示。
 
-最终，我设计了 useAgentChat hook，实现了：
+最终，我设计了 `useAgentChat` hook，实现了：
 
 - ⚡ 流式对话体验（无需等待完整响应）
 - 🤖 多智能体切换（运行时动态选择 agent）
@@ -22,219 +22,141 @@ tags:
 - 💭 思维链可视化（实时展示 AI 思考过程）
 - 🎯 类型安全（完整的 TypeScript 类型定义）
 
-**实现要点概览**
+## 实现要点概览
 
 - **状态管理**：4 个核心状态（messages、isLoading、error、selectedAgent）
-- **双消息模式**：先发用户消息，再创建AI占位消息，实时更新内容
+- **双消息模式**：先发用户消息，再创建 AI 占位消息，实时更新内容
 - **SSE 流式处理**：使用 fetch-event-source 库处理服务器推送
 - **内容累积**：两个累加器分别处理普通回复和思维链内容
 
-以下是分步落地的详细过程：
-
-**详细实现步骤**
+## 详细实现步骤
 
 **步骤 1：接口设计和状态初始化**
 
+```ts
 interface UseAgentChatReturn {
-
-messages: ChatMessage[]
-
-isLoading: boolean
-
-sendMessage: (content: string, files?: File[]) => Promise
-
-cancelRequest: () => void
-
-error: string | null
-
+  messages: ChatMessage[]
+  isLoading: boolean
+  sendMessage: (content: string, files?: File[]) => Promise<void>
+  cancelRequest: () => void
+  error: string | null
 }
 
 export function useAgentChat(): UseAgentChatReturn {
-
-const [messages, setMessages] = useState([])
-
-const [isLoading, setIsLoading] = useState(false)
-
-const [error, setError] = useState(null)
-
-const { selectedAgent } = useAgentStore()
-
-// …
-
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { selectedAgent } = useAgentStore()
+  // …
 }
+```
 
 **关键点**：选择 useState 而不是全局状态管理，是因为每个聊天实例需要独立状态，符合 React 的组件化思想。
 
 **步骤 2：防重复与参数准备**
 
+```ts
 const sendMessage = async (content: string, files: File[] = []) => {
+  // 防重复：如果正在加载则直接返回
+  if (isLoading) return
 
-// 防重复：如果正在加载则直接返回
+  // 重置状态
+  setIsLoading(true)
+  setError(null)
 
-if (isLoading) return
+  // 生成唯一标识
+  const sessionUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  const agentHashId = selectedAgent?.id ?? null
 
-// 重置状态
-
-setIsLoading(true)
-
-setError(null)
-
-// 生成唯一标识
-
-const sessionUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
-
-const agentHashId = selectedAgent?.id ?? null
-
-// 关键：业务侧日志
-
-console.log(“=== Agent Chat Debug ===”)
-
-console.log(“Session:”, sessionUuid, “Agent:”, agentHashId)
-
+  // 关键：业务侧日志
+  console.log("=== Agent Chat Debug ===")
+  console.log("Session:", sessionUuid, "Agent:", agentHashId)
 }
+```
 
 **理由**：这里的 sessionUuid 既是会话标识，也作为 SSE 的订阅 key，服务端按此路由消息。随机数避免并发冲突。
 
-**步骤 3：创建双消息（用户+AI占位）**
+**步骤 3：创建双消息（用户 + AI 占位）**
 
+```ts
 // 用户消息：立即展示
-
 const userMessage: ChatMessage = {
-
-id: Date.now().toString(),
-
-content,
-
-role: “user”,
-
-timestamp: Date.now(),
-
+  id: Date.now().toString(),
+  content,
+  role: "user",
+  timestamp: Date.now(),
 }
+setMessages(prev => [...prev, userMessage])
 
-setMessages(prev => […prev, userMessage])
-
-// AI占位消息：内容为空，后续更新
-
+// AI 占位消息：内容为空，后续更新
 const aiMessageId = (Date.now() + 1).toString()
-
 const aiMessage: ChatMessage = {
-
-id: aiMessageId,
-
-content: “”,
-
-role: “assistant”,
-
-timestamp: Date.now(),
-
-thinking: “”, // 思维链字段
-
+  id: aiMessageId,
+  content: "",
+  role: "assistant",
+  timestamp: Date.now(),
+  thinking: "", // 思维链字段
 }
+setMessages(prev => [...prev, aiMessage])
+```
 
-setMessages(prev => […prev, aiMessage])
-
-**设计思考**：先创建占位消息，后续通过 id 精确定位更新，避免数组索引漂移问题。thinking 字段为思维链预留，符合
-
-OpenAI 的新格式。
+**设计思考**：先创建占位消息，后续通过 id 精确定位更新，避免数组索引漂移问题。thinking 字段为思维链预留，符合 OpenAI 的新格式。
 
 **步骤 4：调用 Agent 启动接口**
 
+```ts
 const runAgentResponse = await chatApi.runAgent(
-
-sessionUuid,
-
-content,
-
-agentHashId,
-
-files
-
+  sessionUuid,
+  content,
+  agentHashId,
+  files
 )
+```
 
-这一步看似简单，实则关键。chatApi.runAgent 内部做了三件事：
-
-- 将文件转为 FormData 格式
-- 构建 body_data JSON，包含指令和智能体过滤条件
+这一步看似简单，实则关键。`chatApi.runAgent` 内部做了三件事：将文件转为 FormData 格式、构建 body_data JSON（包含指令和智能体过滤条件）、携带认证头发送 POST 请求。
 
 **步骤 5：SSE 流式接收（核心逻辑）**
 
-let accumulatedContent = “”
-
-let accumulatedThinking = “”
+```ts
+let accumulatedContent = ""
+let accumulatedThinking = ""
 
 await fetchEventSource(
+  `/ragplus/agent/session/get_agent_chunks_with_sse?session_uuid=${sessionUuid}`,
+  {
+    headers: {
+      Authorization: BEARER_TOKEN,
+    },
+    onmessage(event) {
+      if (event.data === "[DONE]") return
+      try {
+        const parsedData = JSON.parse(event.data)
+        const content = parsedData?.choices?.[0]?.delta?.content || ""
+        const thinking = parsedData?.choices?.[0]?.delta?.reasoning_content || ""
 
-`/ragplus/agent/session/get_agent_chunks_with_sse?session_uuid=${sessionUuid}`,
+        // 累积内容
+        if (content) accumulatedContent += content
+        if (thinking) accumulatedThinking += thinking
 
-{
-
-headers: {
-
-Authorization: BEARER_TOKEN
-
-},
-
-onmessage(event) {
-
-if (event.data === “[DONE]”) return
-
-try {
-
-const parsedData = JSON.parse(event.data)
-
-const content = parsedData?.choices?.[0]?.delta?.content || “”
-
-const thinking = parsedData?.choices?.[0]?.delta?.reasoning_content || “”
-
-// 累积内容
-
-if (content) accumulatedContent += content
-
-if (thinking) accumulatedThinking += thinking
-
-// 实时更新UI
-
-setMessages(prev =>
-
-prev.map(msg =>
-
-msg.id === aiMessageId
-
-? {
-
-…msg,
-
-content: accumulatedContent,
-
-thinking: accumulatedThinking,
-
-}
-
-msg
-
+        // 实时更新 UI
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === aiMessageId
+              ? { ...msg, content: accumulatedContent, thinking: accumulatedThinking }
+              : msg
+          )
+        )
+      } catch (error) {
+        console.error("Parse error:", error)
+      }
+    },
+    onerror(error) {
+      console.error("SSE error:", error)
+      throw error
+    },
+  }
 )
-
-)
-
-} catch (error) {
-
-console.error(“Parse error:”, error)
-
-}
-
-},
-
-onerror(error) {
-
-console.error(“SSE error:”, error)
-
-throw error
-
-},
-
-}
-
-)
+```
 
 **技术细节**：
 
@@ -244,102 +166,288 @@ throw error
 
 **步骤 6：异常处理与资源清理**
 
+```ts
 } catch (error: unknown) {
-
-const err = error as Error
-
-if (err.name === “AbortError”) {
-
-// 用户主动取消
-
-setMessages(prev =>
-
-prev.map(msg =>
-
-msg.id === aiMessageId
-
-? { …msg, content: “Request is aborted” }
-
-msg
-
-)
-
-)
-
-} else {
-
-// 系统错误
-
-setError(“Request failed, please try again!”)
-
-setMessages(prev =>
-
-prev.map(msg =>
-
-msg.id === aiMessageId
-
-? { …msg, content: “Request failed, please try again!” }
-
-msg
-
-)
-
-)
-
-console.error(“Send message error:”, err)
-
-}
-
+  const err = error as Error
+  if (err.name === "AbortError") {
+    // 用户主动取消
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === aiMessageId
+          ? { ...msg, content: "Request is aborted" }
+          : msg
+      )
+    )
+  } else {
+    // 系统错误
+    setError("Request failed, please try again!")
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === aiMessageId
+          ? { ...msg, content: "Request failed, please try again!" }
+          : msg
+      )
+    )
+    console.error("Send message error:", err)
+  }
 } finally {
-
-setIsLoading(false)
-
+  setIsLoading(false)
 }
+```
 
 **步骤 7：导出 hooks 接口**
 
+```ts
 return {
-
-messages,
-
-isLoading,
-
-sendMessage,
-
-cancelRequest, // 预留扩展
-
-error,
-
+  messages,
+  isLoading,
+  sendMessage,
+  cancelRequest, // 预留扩展
+  error,
 }
+```
 
-**设计考量**：接口保持最小实用，但足够完整。外部组件只需调用 sendMessage，无需关心
+**设计考量**：接口保持最小实用，但足够完整。外部组件只需调用 `sendMessage`，无需关心 SSE、缓存、智能体切换等内部逻辑。
 
-SSE、缓存、智能体切换等内部逻辑。
-
-**踩坑与经验**
+## 踩坑与经验
 
 **Q: 为什么要用 fetch-event-source 而不是原生 EventSource？**
 
-A: 原生 EventSource 有三大缺陷：1）只支持 GET 方法，无法发送大文件；2）请求头不可自定义，无法携带复杂认证；3
-
-）错误处理简陋，连接中断不会自动重试。fetch-event-source 基于 fetch，完美解决这些问题。
+A: 原生 EventSource 有三大缺陷：1）只支持 GET 方法，无法发送大文件；2）请求头不可自定义，无法携带复杂认证；3）错误处理简陋，连接中断不会自动重试。fetch-event-source 基于 fetch，完美解决这些问题。
 
 **Q: 如何处理消息列表的性能问题？**
 
-A: 关键在 setMessages(prev => prev.map(…)) 这种函数式更新。React 18 自动批量处理，即使 SSE 推送频繁，UI
-
-也不会卡顿。实测接收 5000 token 的响应，帧率稳定在 60FPS。
+A: 关键在 `setMessages(prev => prev.map(...))` 这种函数式更新。React 18 自动批量处理，即使 SSE 推送频繁，UI 也不会卡顿。实测接收 5000 token 的响应，帧率稳定在 60FPS。
 
 **Q: 为什么使用两个累加器而不是直接 setState？**
 
-A: 这是深思熟虑后的设计。SSE 推送频率极高（可能每 10-50ms 一次），如果每次都直接调用 setMessages，React
+A: 这是深思熟虑后的设计。SSE 推送频率极高（可能每 10-50ms 一次），如果每次都直接调用 setMessages，React 内部会合并更新，但推导新值的函数会执行多次。使用累加器将计算移出 setState，符合"状态更新函数应该是纯函数"的最佳实践。
 
-内部会合并更新，但推导新值的函数会执行多次。使用累加器将计算移出
+## 完整代码
 
-setState，符合”状态更新函数应该是纯函数”的最佳实践。
+</div>
 
+<div class="lang-en">
+
+## Background and Motivation
+
+When building a conversational AI project, we needed to integrate an AI backend, and a single unified React Hook turned out to be the right abstraction. The core requirements: streaming responses, multi-turn conversations, file uploads, and switching agents at runtime. The OpenAI API is mature, but we had to talk to an in-house agent service that uses Server-Sent Events (SSE), with dynamic tool invocation and chain-of-thought display.
+
+The result is a `useAgentChat` hook that delivers:
+
+- ⚡ Streaming chat experience (no waiting for the full response)
+- 🤖 Multi-agent switching (pick an agent at runtime)
+- 📁 File upload support (sent along with the message)
+- 💭 Chain-of-thought visualization (watch the AI think in real time)
+- 🎯 Type safety (full TypeScript definitions)
+
+## Implementation Highlights
+
+- **State management**: 4 core pieces of state (messages, isLoading, error, selectedAgent)
+- **Dual-message pattern**: push the user message first, then create an empty AI placeholder and update it in real time
+- **SSE streaming**: handled with the fetch-event-source library
+- **Content accumulation**: two accumulators for the reply body and the chain-of-thought separately
+
+## Step-by-Step Implementation
+
+**Step 1: Interface design and state initialization**
+
+```ts
+interface UseAgentChatReturn {
+  messages: ChatMessage[]
+  isLoading: boolean
+  sendMessage: (content: string, files?: File[]) => Promise<void>
+  cancelRequest: () => void
+  error: string | null
+}
+
+export function useAgentChat(): UseAgentChatReturn {
+  const [messages, setMessages] = useState<ChatMessage[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const { selectedAgent } = useAgentStore()
+  // …
+}
 ```
-// DS-Agentic/src/hooks/useAgentChat.ts 
+
+**Key point**: `useState` instead of a global store, because each chat instance needs independent state — in line with React's component model.
+
+**Step 2: Duplicate-send guard and parameter preparation**
+
+```ts
+const sendMessage = async (content: string, files: File[] = []) => {
+  // guard: bail out while a request is in flight
+  if (isLoading) return
+
+  // reset state
+  setIsLoading(true)
+  setError(null)
+
+  // generate a unique identifier
+  const sessionUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  const agentHashId = selectedAgent?.id ?? null
+
+  // business-side logging
+  console.log("=== Agent Chat Debug ===")
+  console.log("Session:", sessionUuid, "Agent:", agentHashId)
+}
+```
+
+**Rationale**: the sessionUuid is both the conversation identifier and the SSE subscription key — the server routes messages by it. The random suffix avoids collisions under concurrency.
+
+**Step 3: Create the dual messages (user + AI placeholder)**
+
+```ts
+// user message: shown immediately
+const userMessage: ChatMessage = {
+  id: Date.now().toString(),
+  content,
+  role: "user",
+  timestamp: Date.now(),
+}
+setMessages(prev => [...prev, userMessage])
+
+// AI placeholder: empty for now, updated as chunks arrive
+const aiMessageId = (Date.now() + 1).toString()
+const aiMessage: ChatMessage = {
+  id: aiMessageId,
+  content: "",
+  role: "assistant",
+  timestamp: Date.now(),
+  thinking: "", // chain-of-thought field
+}
+setMessages(prev => [...prev, aiMessage])
+```
+
+**Design note**: creating the placeholder up front lets us locate and update it precisely by id later, avoiding array-index drift. The `thinking` field is reserved for the chain of thought, matching OpenAI's newer format.
+
+**Step 4: Call the agent run API**
+
+```ts
+const runAgentResponse = await chatApi.runAgent(
+  sessionUuid,
+  content,
+  agentHashId,
+  files
+)
+```
+
+Looks trivial, but `chatApi.runAgent` does three things internally: converts files to FormData, builds the body_data JSON (instruction plus agent filter), and sends the POST with auth headers.
+
+**Step 5: SSE streaming (the core logic)**
+
+```ts
+let accumulatedContent = ""
+let accumulatedThinking = ""
+
+await fetchEventSource(
+  `/ragplus/agent/session/get_agent_chunks_with_sse?session_uuid=${sessionUuid}`,
+  {
+    headers: {
+      Authorization: BEARER_TOKEN,
+    },
+    onmessage(event) {
+      if (event.data === "[DONE]") return
+      try {
+        const parsedData = JSON.parse(event.data)
+        const content = parsedData?.choices?.[0]?.delta?.content || ""
+        const thinking = parsedData?.choices?.[0]?.delta?.reasoning_content || ""
+
+        // accumulate content
+        if (content) accumulatedContent += content
+        if (thinking) accumulatedThinking += thinking
+
+        // update the UI in real time
+        setMessages(prev =>
+          prev.map(msg =>
+            msg.id === aiMessageId
+              ? { ...msg, content: accumulatedContent, thinking: accumulatedThinking }
+              : msg
+          )
+        )
+      } catch (error) {
+        console.error("Parse error:", error)
+      }
+    },
+    onerror(error) {
+      console.error("SSE error:", error)
+      throw error
+    },
+  }
+)
+```
+
+**Technical details**:
+
+- fetch-event-source handles reconnects automatically — production-ready
+- Content is accumulated by string concatenation, since SSE `onmessage` may deliver partial JSON
+- `map` updates exactly one message, avoiding re-rendering the whole list
+
+**Step 6: Error handling and cleanup**
+
+```ts
+} catch (error: unknown) {
+  const err = error as Error
+  if (err.name === "AbortError") {
+    // user cancelled
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === aiMessageId
+          ? { ...msg, content: "Request is aborted" }
+          : msg
+      )
+    )
+  } else {
+    // system error
+    setError("Request failed, please try again!")
+    setMessages(prev =>
+      prev.map(msg =>
+        msg.id === aiMessageId
+          ? { ...msg, content: "Request failed, please try again!" }
+          : msg
+      )
+    )
+    console.error("Send message error:", err)
+  }
+} finally {
+  setIsLoading(false)
+}
+```
+
+**Step 7: Export the hook interface**
+
+```ts
+return {
+  messages,
+  isLoading,
+  sendMessage,
+  cancelRequest, // reserved for extension
+  error,
+}
+```
+
+**Design consideration**: the interface stays minimal but complete. Consumers only call `sendMessage` — SSE, caching, and agent switching are all internal concerns.
+
+## Lessons Learned
+
+**Q: Why fetch-event-source instead of the native EventSource?**
+
+A: Native EventSource has three major limitations: 1) GET only, so no large file uploads; 2) no custom headers, so no complex auth; 3) primitive error handling with no automatic retry on disconnect. fetch-event-source is built on fetch and solves all three.
+
+**Q: How do you keep the message list performant?**
+
+A: The key is the functional update `setMessages(prev => prev.map(...))`. React 18 batches automatically, so even with frequent SSE pushes the UI stays smooth. In testing, receiving a 5000-token response held a steady 60 FPS.
+
+**Q: Why two accumulators instead of calling setState directly per chunk?**
+
+A: A deliberate design choice. SSE pushes can arrive every 10-50ms; if each chunk called setMessages directly, React would batch the updates but the derivation function would still run many times. Accumulators move the computation out of setState, honoring the "state updater functions should be pure" best practice.
+
+## Full Source
+
+</div>
+
+```ts
+// DS-Agentic/src/hooks/useAgentChat.ts
 
 import { useState } from "react"
 import { chatApi } from "@/services/chatApi"
@@ -369,13 +477,13 @@ export function useAgentChat(): UseAgentChatReturn {
     setIsLoading(true)
     setError(null)
 
-    // 生成会话ID
+    // generate a session ID
     const sessionUuid = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
 
-    // 获取选中的Agent的agent_hash_id
+    // get the agent_hash_id of the selected agent
     const agentHashId = selectedAgent?.id ?? null
 
-    // 添加用户消息
+    // add the user message
     const userMessage: ChatMessage = {
       id: Date.now().toString(),
       content,
@@ -384,7 +492,7 @@ export function useAgentChat(): UseAgentChatReturn {
     }
     setMessages(prev => [...prev, userMessage])
 
-    // 创建AI消息占位符
+    // create the AI message placeholder
     const aiMessageId = (Date.now() + 1).toString()
     const aiMessage: ChatMessage = {
       id: aiMessageId,
@@ -396,7 +504,7 @@ export function useAgentChat(): UseAgentChatReturn {
     setMessages(prev => [...prev, aiMessage])
 
     try {
-      // 3. 调用runAgent API
+      // 3. call the runAgent API
       const runAgentResponse = await chatApi.runAgent(
         sessionUuid,
         content,
@@ -406,11 +514,11 @@ export function useAgentChat(): UseAgentChatReturn {
 
       console.log("Run agent response:", runAgentResponse)
 
-      // 开始接收流式响应
+      // start receiving the streaming response
       let accumulatedContent = ""
       let accumulatedThinking = ""
 
-      // 使用 fetch-event-source 库处理 SSE
+      // handle SSE with the fetch-event-source library
       await fetchEventSource(
         `/xxx/get_agent_chunks_with_sse?session_uuid=${sessionUuid}`,
         {
@@ -432,7 +540,7 @@ export function useAgentChat(): UseAgentChatReturn {
               if (content) accumulatedContent += content
               if (thinking) accumulatedThinking += thinking
 
-              // 更新AI消息
+              // update the AI message
               setMessages(prev =>
                 prev.map(msg =>
                   msg.id === aiMessageId
@@ -497,11 +605,14 @@ export function useAgentChat(): UseAgentChatReturn {
     error,
   }
 }
-//chatApi.ts
+```
+
+```ts
+// chatApi.ts
 
 import api, { API_BASE_CONFIG } from "./api"
 
-// 聊天相关的API接口定义
+// Chat-related API type definitions
 export interface ChatMessage {
   id: string
   content: string
@@ -529,16 +640,16 @@ export interface StreamChunk {
 }
 
 /**
- * 聊天API服务
+ * Chat API service
  */
 export const chatApi = {
   /**
-   * 运行智能体（参考DSAgenticUI的实现）
-   * @param sessionUuid 会话ID
-   * @param instruction 用户指令
-   * @param agentHashId Agent哈希ID
-   * @param files 上传的文件
-   * @returns API响应
+   * Run an agent (modeled after the DSAgenticUI implementation)
+   * @param sessionUuid session ID
+   * @param instruction user instruction
+   * @param agentHashId agent hash ID
+   * @param files uploaded files
+   * @returns API response
    */
   async runAgent(
     sessionUuid: string,
@@ -549,12 +660,12 @@ export const chatApi = {
     try {
       const formData = new FormData()
 
-      // 添加文件
+      // append files
       files.forEach((file, index) => {
         formData.append(`file${index + 1}`, file)
       })
 
-      // 添加 body_data JSON
+      // append the body_data JSON
       const bodyData = {
         instruction,
         filter_agent: agentHashId ? { agent_hash_id: agentHashId } : {},
@@ -563,13 +674,12 @@ export const chatApi = {
       }
       formData.append("body_data", JSON.stringify(bodyData))
 
-      // 添加 Authorization header 使用 Bearer Token
+      // Authorization header with Bearer token
       const response = await fetch(
         `xxx/run_agent?with_generate_session_title=true&session_uuid=${sessionUuid}`,
         {
           method: "POST",
           body: formData,
-          // 添加正确的认证头
           headers: {
             Authorization: API_BASE_CONFIG.BEARER_TOKEN,
             "X-RAGPLUS-AUTH-TYPE": "jwt",
@@ -589,15 +699,14 @@ export const chatApi = {
   },
 
   /**
-   * 获取智能体流式响应（SSE）
-   * @param sessionUuid 会话ID
-   * @returns 流式响应
+   * Get the agent's streaming response (SSE)
+   * @param sessionUuid session ID
+   * @returns streaming response
    */
   async getAgentChunks(
     sessionUuid: string
   ): Promise<ReadableStream<Uint8Array>> {
-    // 使用原生 fetch 避开 axios 拦截器
-    // 添加 Authorization header 使用 Bearer Token
+    // use raw fetch to bypass axios interceptors
     const response = await fetch(
       `xxx/get_agent_chunks_with_sse?session_uuid=${sessionUuid}`,
       {
@@ -619,9 +728,9 @@ export const chatApi = {
   },
 
   /**
-   * 处理流式响应数据
-   * @param reader 流式读取器
-   * @param onChunk 处理每个数据块的回调
+   * Process streaming response data
+   * @param reader stream reader
+   * @param onChunk callback for each chunk
    */
   processStreamResponse: async (
     reader: ReadableStreamDefaultReader<Uint8Array>,
@@ -653,9 +762,9 @@ export const chatApi = {
   },
 
   /**
-   * 转换流式数据
-   * @param data 原始数据字符串
-   * @returns 解析后的内容
+   * Transform stream data
+   * @param data raw data string
+   * @returns parsed content
    */
   transformStreamData: (
     data: string
@@ -676,11 +785,4 @@ export const chatApi = {
 }
 
 export default chatApi
-
 ```
-
-编辑于 2025-12-19 19:55・北京豆包大模型超值特惠！在GUI操作能力方面，豆包大模型凭借一流的视觉深度思考，精准的视觉定位，智能体能轻松与互联网进行交互和操作。约800万tokens限量秒杀仅需19元，点击即享特惠查看详情在GUI操作能力方面，豆包大模型凭借一流的视觉深度思考，精准的视觉定位，智能体能轻松与互联网进行交互和操作。约800万tokens限量秒杀仅需19元，点击即享特惠 查看详情
-
-![](https://picx.zhimg.com/v2-43be24a3ba2b2ec7fcd9af441d1b12e6_xl.webp?source=d6434cab)
-
-火山引擎的广告 (https://www.volcengine.com/activity/ark?utm_source=7&utm_medium=zhihu&utm_term=vg_zhihu_libao_webtw_dmx19k9&utm_campaign=0&utm_content=dbdmx_19k9&spu=biz%3D0%26ci%3D3665552%26si%3Dbad022a6-38da-4cf9-9e52-1f1319ebd7ba%26ts%3D1790905292%26zid%3D1629)
